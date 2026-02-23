@@ -126,7 +126,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # 🔴 FIX: Point to the new frontend folder
 STATICFILES_DIRS = [
-    BASE_DIR.parent / "frontend_Itrik_code" / "static",
+    BASE_DIR.parent / "https://itrik-e-commerce-frontend.vercel.app","frontend_Itrik_code" / "static",
 ]
 
 MEDIA_URL = "/media/"
