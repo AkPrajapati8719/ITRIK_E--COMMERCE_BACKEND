@@ -1,0 +1,257 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "ITRIK API Testing",
+  "dateExport": "2026-01-17T10:30:00.000Z",
+  "version": "1.1",
+  "folders": [],
+  "requests": [
+    {
+      "id": "1",
+      "name": "Send OTP",
+      "method": "POST",
+      "url": "http://localhost:8000/api/auth/send-otp/",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "mobile_number": "9876543210",
+        "full_name": "John Doe"
+      },
+      "auth": "none",
+      "tests": []
+    },
+    {
+      "id": "2",
+      "name": "Verify OTP",
+      "method": "POST",
+      "url": "http://localhost:8000/api/auth/verify-otp/",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "mobile_number": "9876543210",
+        "otp_code": "1234"
+      },
+      "auth": "none",
+      "tests": []
+    },
+    {
+      "id": "3",
+      "name": "Get User Profile",
+      "method": "GET",
+      "url": "http://localhost:8000/api/auth/profile/",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "4",
+      "name": "Update User Profile",
+      "method": "PUT",
+      "url": "http://localhost:8000/api/auth/profile/",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "body": {
+        "full_name": "John Doe",
+        "email": "john@example.com",
+        "shipping_address": "E-45, Emerald Greens, Bhopal",
+        "alternate_mobile": "9876543211"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "5",
+      "name": "Get All Products",
+      "method": "GET",
+      "url": "http://localhost:8000/api/products/",
+      "headers": {},
+      "auth": "none",
+      "tests": []
+    },
+    {
+      "id": "6",
+      "name": "Get Featured Products",
+      "method": "GET",
+      "url": "http://localhost:8000/api/products/?featured=true",
+      "headers": {},
+      "auth": "none",
+      "tests": []
+    },
+    {
+      "id": "7",
+      "name": "Search Products",
+      "method": "GET",
+      "url": "http://localhost:8000/api/products/?search=skillet",
+      "headers": {},
+      "auth": "none",
+      "tests": []
+    },
+    {
+      "id": "8",
+      "name": "Get Product Details",
+      "method": "GET",
+      "url": "http://localhost:8000/api/products/cast-iron-skillet/",
+      "headers": {},
+      "auth": "none",
+      "tests": []
+    },
+    {
+      "id": "9",
+      "name": "Get Categories",
+      "method": "GET",
+      "url": "http://localhost:8000/api/products/categories/",
+      "headers": {},
+      "auth": "none",
+      "tests": []
+    },
+    {
+      "id": "10",
+      "name": "Add Review",
+      "method": "POST",
+      "url": "http://localhost:8000/api/products/cast-iron-skillet/add_review/",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "body": {
+        "rating": 5,
+        "comment": "Amazing product! Highly recommended."
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "11",
+      "name": "Get Cart",
+      "method": "GET",
+      "url": "http://localhost:8000/api/cart/",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "12",
+      "name": "Add to Cart",
+      "method": "POST",
+      "url": "http://localhost:8000/api/cart/add/",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "body": {
+        "product_id": "YOUR_PRODUCT_UUID",
+        "quantity": 1
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "13",
+      "name": "Update Cart Item",
+      "method": "PATCH",
+      "url": "http://localhost:8000/api/cart/update/YOUR_CART_ITEM_ID/",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "body": {
+        "quantity": 3
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "14",
+      "name": "Remove from Cart",
+      "method": "DELETE",
+      "url": "http://localhost:8000/api/cart/remove/YOUR_CART_ITEM_ID/",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "15",
+      "name": "Clear Cart",
+      "method": "DELETE",
+      "url": "http://localhost:8000/api/cart/clear/",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "16",
+      "name": "Create Order",
+      "method": "POST",
+      "url": "http://localhost:8000/api/orders/create/",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "body": {
+        "shipping_address": "E-45, Emerald Greens, Arera Colony, Bhopal 462016"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "17",
+      "name": "Get All Orders",
+      "method": "GET",
+      "url": "http://localhost:8000/api/orders/",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "18",
+      "name": "Get Order Details",
+      "method": "GET",
+      "url": "http://localhost:8000/api/orders/YOUR_ORDER_ID/",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "19",
+      "name": "Track Order",
+      "method": "GET",
+      "url": "http://localhost:8000/api/orders/YOUR_ORDER_ID/track/",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "auth": "bearer",
+      "tests": []
+    },
+    {
+      "id": "20",
+      "name": "Update Order Status (Admin)",
+      "method": "PATCH",
+      "url": "http://localhost:8000/api/orders/YOUR_ORDER_ID/update-status/",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ADMIN_TOKEN"
+      },
+      "body": {
+        "status": "Shipped",
+        "notes": "Order has been shipped from our warehouse"
+      },
+      "auth": "bearer",
+      "tests": []
+    }
+  ]
+}

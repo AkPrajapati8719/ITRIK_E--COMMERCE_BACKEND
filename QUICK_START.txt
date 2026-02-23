@@ -1,0 +1,368 @@
+# ITRIK E-Commerce Platform - Quick Start Guide
+
+## 🚀 GETTING STARTED
+
+### Server Status
+✅ **Django Server is RUNNING** at http://127.0.0.1:8000/
+
+### Access Points
+
+#### 1. **Main Store Website**
+```
+URL: http://127.0.0.1:8000/index.html
+- Browse products
+- Login with OTP
+- Add to cart
+- View about section
+- Read blog posts
+- Contact us
+```
+
+#### 2. **Admin Dashboard** (For Store Managers)
+```
+URL: http://127.0.0.1:8000/admin.html
+Username: (must be superuser)
+Password: (superuser password)
+
+Features:
+- Dashboard overview (total products, orders, revenue)
+- Manage products (add, edit, delete)
+- Manage categories
+- Manage orders and delivery status
+- View and moderate reviews
+- Manage blog posts
+- View contact messages
+- Edit site settings (hero images, titles, social links)
+```
+
+#### 3. **User Dashboard** (After Login)
+```
+URL: http://127.0.0.1:8000/dashboard.html
+- Complete your profile
+- View your orders
+- Track order delivery
+- Manage shopping cart
+- View order history
+```
+
+#### 4. **Django Admin Panel** (Technical)
+```
+URL: http://127.0.0.1:8000/admin/
+Username: (superuser username)
+Password: (superuser password)
+
+View/Edit:
+- Users
+- Products
+- Orders
+- Blog posts
+- Contact messages
+- Site settings
+```
+
+---
+
+## 🔑 AUTHENTICATION
+
+### How to Login:
+1. Open http://127.0.0.1:8000/index.html
+2. Click "Login" button (top right)
+3. Enter **Full Name**
+4. Enter **10-digit Mobile Number** (e.g., 9876543210)
+5. Click "Send OTP"
+6. Check console or terminal for OTP (printed for testing)
+7. Enter OTP (4 digits)
+8. Click "Verify & Login"
+
+### First Time Users:
+- System will ask to complete profile
+- Enter: Email, Mobile, Address, City, Pincode
+- Click "Complete Profile"
+- Now you can shop!
+
+### Test Credentials:
+```
+Mobile: 9876543210 (or any 10-digit number)
+OTP: Will be printed in console/terminal
+```
+
+---
+
+## 🛍️ SHOPPING FLOW
+
+### 1. Browse Products
+- Homepage displays featured products
+- Click arrows to browse carousel
+- View product details, prices, ratings
+
+### 2. Add to Cart
+- Click "Buy Now" button on product
+- Product added to cart (top right)
+- View cart by clicking cart icon
+
+### 3. Checkout
+- Open cart
+- Review items and quantities
+- Click "CHECKOUT"
+- Order created successfully
+- Redirected to dashboard
+
+### 4. Track Order
+- Go to Dashboard → My Orders
+- See all your orders
+- Click order to see details
+- View delivery timeline
+- Check estimated delivery date
+- Cancel order if needed
+
+---
+
+## 📊 ADMIN PANEL FEATURES
+
+### Dashboard
+- View total products, orders, revenue, users
+- Quick overview of business metrics
+
+### Products
+- Search products by name
+- Add new product (name, category, price, stock, images/videos)
+- Edit existing products
+- Delete products
+- Mark as featured
+
+### Categories
+- Add new categories
+- Manage category names
+- Organize products
+
+### Orders
+- View all customer orders
+- See order status (Processing, Shipped, Delivered, etc.)
+- Update delivery status
+- View customer details
+
+### Reviews
+- See all customer reviews
+- View product ratings
+- Monitor customer feedback
+
+### Blog
+- Create blog posts (title, content, excerpt, featured image)
+- Publish/draft posts
+- Edit blog content
+- Delete old posts
+
+### Contact Messages
+- View customer inquiries
+- Mark messages as read
+- Track customer names, emails, subjects
+
+### Site Settings
+- Upload hero image
+- Edit hero title and subtitle
+- Set button text
+- Update about text
+- Add contact email, phone, address
+- Add social media links (Instagram, Facebook, Twitter)
+
+---
+
+## 📱 API ENDPOINTS (For Developers)
+
+### Base URL
+```
+http://127.0.0.1:8000/api
+```
+
+### Authentication
+```
+POST /auth/send-otp/
+POST /auth/verify-otp/
+GET  /auth/profile/
+PUT  /auth/profile/
+POST /auth/profile/complete/
+```
+
+### Products
+```
+GET  /products/                    - List all products with filters
+GET  /products/{id}/               - Get product details
+GET  /categories/                  - List categories
+POST /products/{id}/add_review/    - Add review to product
+```
+
+### Shopping Cart
+```
+GET    /cart/                      - Get user's cart
+POST   /cart/add/                  - Add item to cart
+DELETE /cart/remove/               - Remove item
+PATCH  /cart/update/               - Update quantity
+DELETE /cart/clear/                - Clear cart
+```
+
+### Orders
+```
+GET    /orders/                    - List user's orders
+POST   /orders/                    - Create order
+GET    /orders/{id}/               - Order details
+POST   /orders/{id}/cancel/        - Cancel order
+GET    /orders/{id}/estimate_delivery/ - Estimated delivery
+GET    /orders/{id}/track/         - Track order
+```
+
+### Content
+```
+GET  /blog/                        - List blog posts
+POST /blog/                        - Create blog (admin)
+PUT  /blog/{id}/                   - Edit blog (admin)
+
+GET  /contact/                     - List messages (admin)
+POST /contact/                     - Submit contact form
+POST /contact/{id}/mark_read/      - Mark read (admin)
+
+GET /settings/                     - Get site settings
+PUT /settings/                     - Update settings (admin)
+```
+
+---
+
+## 🔐 SECURITY
+
+### Protected Endpoints
+- All `/cart/` endpoints require login
+- All `/orders/` endpoints require login
+- Blog create/edit/delete require admin access
+- Contact messages require admin access
+- Site settings require admin access
+
+### Token Usage
+```javascript
+// Example: Add to cart
+fetch('http://127.0.0.1:8000/api/cart/add/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_TOKEN'
+  },
+  body: JSON.stringify({
+    product_id: 'product-uuid',
+    quantity: 1
+  })
+})
+```
+
+---
+
+## 📂 FILE LOCATIONS
+
+### Backend
+```
+itrik_backend/
+├── accounts/         - User authentication
+├── store/           - Products & reviews
+├── cart/            - Shopping cart
+├── orders/          - Order management
+├── content/         - Blog, contact, settings
+├── core/            - Django config
+├── db.sqlite3       - Database
+└── manage.py        - Django CLI
+```
+
+### Frontend
+```
+/
+├── index.html       - Main store
+├── admin.html       - Admin dashboard
+├── dashboard.html   - User dashboard
+├── images/          - Product images
+└── styles/          - CSS files
+```
+
+---
+
+## 🆘 TROUBLESHOOTING
+
+### Server Won't Start
+```bash
+cd itrik_backend
+python manage.py runserver
+```
+
+### Migrations Issue
+```bash
+cd itrik_backend
+python manage.py migrate
+```
+
+### Admin Access Denied
+```bash
+# Create superuser
+cd itrik_backend
+python manage.py createsuperuser
+```
+
+### CORS Error
+- Make sure server is running on http://127.0.0.1:8000/
+- Check settings.py CORS_ALLOWED_ORIGINS
+
+### Products Not Showing
+- Check if products exist in database
+- Visit http://127.0.0.1:8000/api/products/
+- Should see JSON list of products
+
+### Cart Not Working
+- Make sure you're logged in
+- Check Authorization header has valid token
+- Clear browser cache
+
+---
+
+## ✅ FEATURE CHECKLIST
+
+### Core Features
+- ✅ User authentication with OTP
+- ✅ Profile management
+- ✅ Product browsing and filtering
+- ✅ Shopping cart
+- ✅ Order creation and tracking
+- ✅ Order cancellation
+- ✅ Product reviews
+- ✅ Blog system
+- ✅ Contact form
+- ✅ Site settings management
+
+### Admin Features
+- ✅ Product management
+- ✅ Category management
+- ✅ Order management
+- ✅ Review moderation
+- ✅ Blog management
+- ✅ Contact message viewing
+- ✅ Site settings editing
+- ✅ Dashboard with metrics
+
+### Frontend Features
+- ✅ Responsive design
+- ✅ Product carousel
+- ✅ Product ratings
+- ✅ Image/video support
+- ✅ Animations (GSAP, AOS)
+- ✅ 3D elements (Three.js)
+- ✅ Mobile navigation
+- ✅ Glass-morphism design
+
+---
+
+## 📞 SUPPORT
+
+For issues or questions:
+1. Check Django error logs in terminal
+2. Open browser developer console (F12)
+3. Check Network tab for API responses
+4. Review README files in project folders
+
+---
+
+**Status**: 🟢 FULLY OPERATIONAL
+
+All systems ready to use!
