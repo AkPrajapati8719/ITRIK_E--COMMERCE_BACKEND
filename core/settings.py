@@ -20,6 +20,7 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
     "localhost,127.0.0.1"
+    "https://itrik-e-commerce-backend-1.onrender.com"
 ).split(",")
 
 # =============================================================================
@@ -219,8 +220,11 @@ OTP_ATTEMPT_LIMIT = 5
 # =============================================================================
 # CORS
 # =============================================================================
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://itrik-e-commerce-frontend.vercel.app", #live frontend url
+]
 
 # =============================================================================
 # LOGGING
@@ -252,6 +256,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "https://itrik-e-commerce-frontend.vercel.app", #live frontend url
+    "https://itrik-e-commerce-backend-1.onrender.com", #live backend url
 ]
 
 # =============================================================================
