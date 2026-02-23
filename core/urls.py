@@ -14,8 +14,9 @@ def home(request):
     """
     Serve index.html as homepage
     """
-    # 🔥 FIX: Added 'https://itrik-e-commerce-frontend.vercel.app' to the path
-    index_path = os.path.join(str(settings.BASE_DIR.parent), "https://itrik-e-commerce-frontend.vercel.app", "index.html")
+    # 🔥 FIX: Use the local folder name instead of the Vercel URL. 
+    # os.path cannot read "https://", it can only read local folders.
+    index_path = os.path.join(str(settings.BASE_DIR.parent), "frontend_Itrik_code", "index.html")
 
     if os.path.exists(index_path):
         with open(index_path, "r", encoding="utf-8") as f:
@@ -28,8 +29,8 @@ def home(request):
 
 
 def serve_html_file(request, filename):
-    # 🔥 FIX: Added 'https://itrik-e-commerce-frontend.vercel.app' to the path
-    file_path = os.path.join(str(settings.BASE_DIR.parent), "https://itrik-e-commerce-frontend.vercel.app", f"{filename}.html")
+    # 🔥 FIX: Changed back to "frontend_Itrik_code"
+    file_path = os.path.join(str(settings.BASE_DIR.parent), "frontend_Itrik_code", f"{filename}.html")
 
     if os.path.exists(file_path):
         with open(file_path, "r", encoding="utf-8") as f:
@@ -76,12 +77,12 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-    # 🔥 FIX: Point to the images folder inside https://itrik-e-commerce-frontend.vercel.app
-    images_dir = os.path.join(settings.BASE_DIR.parent, "https://itrik-e-commerce-frontend.vercel.app", "images")
+    # 🔥 FIX: Changed back to "frontend_Itrik_code"
+    images_dir = os.path.join(settings.BASE_DIR.parent, "frontend_Itrik_code", "images")
     if os.path.exists(images_dir):
         urlpatterns += static("/images/", document_root=images_dir)
         
-    # 🔥 FIX: Point to the static folder (JS/CSS) inside https://itrik-e-commerce-frontend.vercel.app
-    frontend_static_dir = os.path.join(settings.BASE_DIR.parent, "https://itrik-e-commerce-frontend.vercel.app", "static")
+    # 🔥 FIX: Changed back to "frontend_Itrik_code"
+    frontend_static_dir = os.path.join(settings.BASE_DIR.parent, "frontend_Itrik_code", "static")
     if os.path.exists(frontend_static_dir):
         urlpatterns += static("/static/", document_root=frontend_static_dir)

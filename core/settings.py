@@ -17,11 +17,12 @@ SECRET_KEY = os.getenv(
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1"
-    "https://itrik-e-commerce-backend-1.onrender.com"
-).split(",")
+# 🔥 FIX 1: Removed os.getenv split, removed https://, and used a clean list.
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "itrik-e-commerce-backend-1.onrender.com"
+]
 
 # =============================================================================
 # GOOGLE AUTH
@@ -119,13 +120,10 @@ USE_TZ = True
 # =============================================================================
 # STATIC & MEDIA
 # =============================================================================
-# =============================================================================
-# STATIC & MEDIA
-# =============================================================================
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# 🔴 FIX: Point to the new frontend folder
+# Left exactly as you requested
 STATICFILES_DIRS = [
     BASE_DIR.parent / "frontend_Itrik_code" / "static",
 ]
@@ -140,7 +138,6 @@ AUTH_USER_MODEL = "accounts.User"
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
-
 
 # =============================================================================
 # DJANGO REST FRAMEWORK
@@ -186,7 +183,6 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 
-
 # =============================================================================
 # FAST2SMS GATEWAY CONFIG (PRODUCTION READY)
 # =============================================================================
@@ -209,7 +205,6 @@ RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
 RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
 RAZORPAY_WEBHOOK_SECRET = os.getenv("RAZORPAY_WEBHOOK_SECRET")
 
-
 # =============================================================================
 # OTP CONFIG
 # =============================================================================
@@ -222,8 +217,14 @@ OTP_ATTEMPT_LIMIT = 5
 # =============================================================================
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+# 🔥 FIX 2: Added https:// to the Vercel link, and included local ports for testing.
 CORS_ALLOWED_ORIGINS = [
-    "https://itrik-e-commerce-frontend.vercel.app", #live frontend url
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "https://itrik-e-commerce-frontend.vercel.app", 
 ]
 
 # =============================================================================
@@ -256,8 +257,10 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://itrik-e-commerce-frontend.vercel.app", #live frontend url
-    "https://itrik-e-commerce-backend-1.onrender.com", #live backend url
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "https://itrik-e-commerce-frontend.vercel.app", 
+    "https://itrik-e-commerce-backend-1.onrender.com", 
 ]
 
 # =============================================================================
@@ -266,11 +269,10 @@ CSRF_TRUSTED_ORIGINS = [
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
-SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_HTTPONLY = True
+# 🔴 CRITICAL FOR VERCEL + RENDER (Cross-Domain)
+SESSION_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SAMESITE = "None"
 SESSION_SAVE_EVERY_REQUEST = True
-
-CSRF_COOKIE_SAMESITE = "Lax"
 
 # Dev vs Production handling
 if DEBUG:
