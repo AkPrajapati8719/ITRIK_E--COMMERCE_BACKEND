@@ -19,8 +19,6 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 
 # 🔥 FIX 1: Removed os.getenv split, removed https://, and used a clean list.
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
     "itrik-e-commerce-backend-1.onrender.com"
 ]
 
