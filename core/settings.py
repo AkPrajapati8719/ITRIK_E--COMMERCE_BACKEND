@@ -19,7 +19,11 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 
 # 🔥 FIX 1: Removed os.getenv split, removed https://, and used a clean list.
 ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
     "itrik-e-commerce-backend-1.onrender.com"
+    ".vercel.app",  # Optional: Allows any Vercel preview branch to communicate
+    ".onrender.com", # Optional:
 ]
 
 # =============================================================================
@@ -54,9 +58,9 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 # =============================================================================
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # MUST be first
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",           # 1. Handle CORS first
+    "django.middleware.security.SecurityMiddleware",    # 2. Security second
+    "django.contrib.sessions.middleware.SessionMiddleware", # 3. Sessions third
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -143,6 +147,7 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         # "rest_framework.permissions.IsAuthenticated",
@@ -220,8 +225,6 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
     "https://itrik-e-commerce-frontend.vercel.app", 
 ]
 
@@ -255,8 +258,6 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
     "https://itrik-e-commerce-frontend.vercel.app", 
     "https://itrik-e-commerce-backend-1.onrender.com", 
 ]
@@ -274,13 +275,12 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 # Dev vs Production handling
 if DEBUG:
+    SESSION_COOKIE_SAMESITE = "Lax"  # Changed from "None"
+    CSRF_COOKIE_SAMESITE = "Lax"     # Changed from "None"
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 else:
+    SESSION_COOKIE_SAMESITE = "None" # Keep "None" for Production (HTTPS)
+    CSRF_COOKIE_SAMESITE = "None"    # Keep "None" for Production (HTTPS)
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_HTTPONLY = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_SSL_REDIRECT = True
