@@ -17,21 +17,26 @@ python manage.py createsuperuser --no-input || true
 
 # 2. 🔥 FORCE UPDATE: Fixes unusable passwords and grants staff access
 # This uses your Render Environment Variables to update the record
+# ... inside your build.sh ...
+
 python manage.py shell -c "
 from accounts.models import User
 import os
 
+# Use the exact email from your Render Env Var
 email = os.getenv('DJANGO_SUPERUSER_EMAIL')
 password = os.getenv('DJANGO_SUPERUSER_PASSWORD')
 
-u = User.objects.filter(email=email).first()
-if u:
-    u.set_password(password) # Overwrites unusable password markers
-    u.is_staff = True        # Grants access to /admin/
-    u.is_superuser = True    # Grants all permissions
-    u.is_active = True       # Ensures account isn't locked
-    u.save()
-    print(f'✅ Successfully updated and activated admin: {email}')
-else:
-    print('❌ Admin user not found. Check DJANGO_SUPERUSER_EMAIL in Render.')
+# This forces the user to be exactly what you need
+user, created = User.objects.update_or_create(
+    email=email,
+    defaults={
+        'is_staff': True,
+        'is_superuser': True,
+        'is_active': True
+    }
+)
+user.set_password(password)
+user.save()
+print(f'Done! User {email} is now a Staff Superuser with a fresh password.')
 "
