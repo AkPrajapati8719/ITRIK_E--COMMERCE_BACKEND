@@ -59,11 +59,11 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 # =============================================================================
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",           # 1. Handle CORS first
-    "django.middleware.security.SecurityMiddleware",    # 2. Security second
-    "whitenoise.middleware.WhiteNoiseMiddleware",      # ✅ UPDATED: Added for static files
-    "django.contrib.sessions.middleware.SessionMiddleware", # 3. Sessions third
-    "django.middleware.common.CommonMiddleware",
+    "corsheaders.middleware.CorsMiddleware",           # ✅ Keep this first
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",       # ✅ Common must be below CORS
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -225,15 +225,22 @@ OTP_ATTEMPT_LIMIT = 5
 # =============================================================================
 # CORS
 # =============================================================================
-# CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-# 🔥 FIX 2: Added https:// to the Vercel link, and included local ports for testing.
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "https://itrik-e-commerce-frontend.vercel.app", 
 ]
+
+# Ensure headers like 'Content-Type' and 'Authorization' are allowed
+from corsheaders.defaults import default_headers
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "content-type",
+    "authorization",
+    "x-csrftoken",
+]
+
 
 # =============================================================================
 # LOGGING
@@ -260,6 +267,9 @@ from corsheaders.defaults import default_headers
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     "authorization",
+    "content-type",
+    "x-csrftoken",
+    "x-requested-with",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -269,25 +279,27 @@ CSRF_TRUSTED_ORIGINS = [
     "https://itrik-e-commerce-backend-1.onrender.com", 
 ]
 
+CSRF_ALLOWED_ORIGINS = [
+    "https://itrik-e-commerce-frontend.vercel.app",
+]
+
 # =============================================================================
 # Session and cookies  (CART + ORDER)
 # =============================================================================
-
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-
-# 🔴 CRITICAL FOR VERCEL + RENDER (Cross-Domain)
-SESSION_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SAMESITE = "None"
 SESSION_SAVE_EVERY_REQUEST = True
 
-# Dev vs Production handling
 if DEBUG:
-    SESSION_COOKIE_SAMESITE = "Lax"  # Changed from "None"
-    CSRF_COOKIE_SAMESITE = "Lax"     # Changed from "None"
+    SESSION_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 else:
-    SESSION_COOKIE_SAMESITE = "None" # Keep "None" for Production (HTTPS)
-    CSRF_COOKIE_SAMESITE = "None"    # Keep "None" for Production (HTTPS)
+    # 🔴 REQUIRED FOR CROSS-DOMAIN (Vercel -> Render)
+    SESSION_COOKIE_SAMESITE = "None"
+    CSRF_COOKIE_SAMESITE = "None"
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    # Add these to ensure the domain is accepted
+    # SESSION_COOKIE_DOMAIN = ".onrender.com" 
+    # CSRF_COOKIE_DOMAIN = ".onrender.com"
