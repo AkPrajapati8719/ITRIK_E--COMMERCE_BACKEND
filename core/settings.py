@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",           # 1. Handle CORS first
     "django.middleware.security.SecurityMiddleware",    # 2. Security second
+    "whitenoise.middleware.WhiteNoiseMiddleware",      # ✅ UPDATED: Added for static files
     "django.contrib.sessions.middleware.SessionMiddleware", # 3. Sessions third
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -132,6 +133,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR.parent / "frontend_Itrik_code" / "static",
 ]
+
+# ✅ UPDATED: Storage for WhiteNoise to handle Admin CSS/JS on Render
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
