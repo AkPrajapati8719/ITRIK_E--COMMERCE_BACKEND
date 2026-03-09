@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()
 
@@ -21,7 +22,7 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "itrik-e-commerce-backend-1.onrender.com"
+    "itrik-e-commerce-backend-1.onrender.com",
     ".vercel.app",  # Optional: Allows any Vercel preview branch to communicate
     ".onrender.com", # Optional:
 ]
@@ -95,10 +96,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 # DATABASE
 # =============================================================================
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    'default': dj_database_url.config(
+        # This will use the DATABASE_URL environment variable on Render
+        # If working locally, it falls back to your local SQLite file
+        default=os.getenv('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+        conn_max_age=600
+    )
 }
 
 # =============================================================================
