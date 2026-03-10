@@ -85,19 +85,22 @@ class SendOTPView(APIView):
         # Send OTP
         if is_email:
             try:
+                # 🔥 FIX: Added fail_silently=False to catch SMTP/Auth errors
                 send_mail(
                     "Your ITRIK Login OTP",
                     f"Your OTP is {otp}. Valid for 5 minutes.",
                     settings.DEFAULT_FROM_EMAIL,
                     [identifier],
+                    fail_silently=False, 
                 )
-            except Exception:
-                return Response({"error": "Email failed"}, status=500)
+            except Exception as e:
+                # Log the error to Render console so you can see why it failed
+                print(f"SMTP Error: {e}") 
+                return Response({"error": "Email failed. Please check server SMTP settings."}, status=500)
         else:
             send_sms_simulation(identifier, otp)
 
         return Response({"success": True})
-
 
 # ======================================================
 # 🔐 VERIFY OTP (CUSTOMER)
