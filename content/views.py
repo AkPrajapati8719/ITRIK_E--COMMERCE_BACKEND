@@ -30,35 +30,29 @@ class BlogViewSet(viewsets.ModelViewSet):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all().order_by('-created_at')
     serializer_class = ContactMessageSerializer
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
-        # 1. Validate the incoming data
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            # 2. SAVE to Database (This makes it appear in Django Admin)
             contact = serializer.save()
 
-            # 3. Optional Email Notification logic
+            # optional email
             try:
                 send_mail(
-                    subject=f"New Contact Message from {contact.name}",
-                    message=f"Name: {contact.name}\nMobile: {contact.mobile}\n\nMessage:\n{contact.message}",
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[settings.DEFAULT_FROM_EMAIL],
-                    fail_silently=False, # Changed to False so errors show in your Render logs
+                    f"New Contact Message from {contact.name}",
+                    f"Mobile: {contact.mobile}\n\n{contact.message}",
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.DEFAULT_FROM_EMAIL],
+                    fail_silently=True,
                 )
-            except Exception as e:
-                # Log the error to your console/Render logs but don't stop the 'success' response
-                print(f"Admin Email Error: {e}") 
+            except Exception:
                 pass
 
-            # 4. Return success response to Frontend
             return Response(
                 {
                     "success": True,
@@ -67,8 +61,8 @@ class ContactViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_201_CREATED
             )
 
-        # If data is invalid (e.g. mobile number format error), return 400
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SiteSettingsViewSet(viewsets.ModelViewSet):
     queryset = SiteSettings.objects.all()
