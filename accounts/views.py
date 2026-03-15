@@ -49,11 +49,10 @@ class SendOTPView(APIView):
             return Response({"error": "Invalid email or mobile"}, status=400)
 
         # Block OTP for delivery partners
-        user = (
-            User.objects.filter(email=identifier).first()
-            if is_email else
-            User.objects.filter(mobile_number=identifier).first()
-        )
+        if is_email:
+            user = User.objects.filter(email__iexact=identifier).first()
+        else:
+            user = User.objects.filter(mobile_number=identifier).first()
 
         if user and user.is_delivery_partner:
             return Response(
@@ -86,13 +85,15 @@ class SendOTPView(APIView):
         if is_email:
             try:
                 send_mail(
-                    "Your ITRIK Login OTP",
-                    f"Your OTP is {otp}. Valid for 5 minutes.",
-                    settings.DEFAULT_FROM_EMAIL,
-                    [identifier],
+                    subject="Your ITRIK Login OTP",
+                    message=f"Your OTP is {otp}. Valid for 5 minutes.",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[identifier],
+                    fail_silently=False,
                 )
-            except Exception:
-                return Response({"error": "Email failed"}, status=500)
+            except Exception as e:
+                print("EMAIL ERROR:", str(e))
+                return Response({"error": "Email sending failed"}, status=500)
         else:
             send_sms_simulation(identifier, otp)
 
