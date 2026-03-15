@@ -89,16 +89,15 @@ urlpatterns = [
 # Product images / blog images must work online
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# 🛠️ STATIC FILES
-# Admin panel CSS/JS support
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-
 # =====================================================
 # LOCAL FRONTEND ASSETS (DEBUG MODE ONLY)
 # =====================================================
 
 if settings.DEBUG:
+
+    # 🛠️ STATIC FILES
+    # Admin panel CSS/JS support
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
     # Serve images folder from frontend directory
     images_dir = os.path.join(
